@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchDresses, deleteDress, clearError } from '../redux/slices/dressSlice'
+import { fetchDress, deleteDress, clearError } from '../redux/slices/dressSlice'
 import { Link } from 'react-router-dom'
 
 const Home = () => {

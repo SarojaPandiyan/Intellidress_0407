@@ -5,7 +5,7 @@ import axios from 'axios'
 const API_URL = import.meta.env.VITE_API_URL
 
 // Async thunks
-export const fetchDresses = createAsyncThunk(
+export const fetchDress = createAsyncThunk(
   'dresses/fetchDresses',
   async (filters = {}, { rejectWithValue }) => {
     try {
