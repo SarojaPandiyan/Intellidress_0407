@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL
 
 // Async thunks
 export const fetchDress = createAsyncThunk(
-  'dresses/fetchDresses',
+  'dresses/fetchDress',
   async (filters = {}, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_URL}/dresses`, { params: filters })
@@ -84,15 +84,15 @@ const dressSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch dresses
-      .addCase(fetchDresses.pending, (state) => {
+      .addCase(fetchDress.pending, (state) => {
         state.loading = true
         state.error = null
       })
-      .addCase(fetchDresses.fulfilled, (state, action) => {
+      .addCase(fetchDress.fulfilled, (state, action) => {
         state.loading = false
         state.items = action.payload
       })
-      .addCase(fetchDresses.rejected, (state, action) => {
+      .addCase(fetchDress.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })
