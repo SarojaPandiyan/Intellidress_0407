@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import './Pages.css'; 
 import { fetchDresses } from '../redux/slices/dressSlice' // FIXED: fetchDresses not fetchDress
 
 const DressSuggestions = () => {
