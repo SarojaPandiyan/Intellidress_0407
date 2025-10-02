@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 // Use environment variable for API URL
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = import.meta.env.REACT_APP_API_URL
 
 // Async thunks
 export const fetchDress = createAsyncThunk(
