@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchDresses, deleteDress, clearError } from '../redux/slices/dressSlice'
 import { Link } from 'react-router-dom'
 import './Pages.css';
-
 const Home = () => {
   const dispatch = useDispatch()
   const { items: dresses, loading, error } = useSelector(state => state.dresses)
@@ -14,7 +13,7 @@ const Home = () => {
   })
 
   useEffect(() => {
-    dispatch(fetchDresses(filters)) // FIXED: fetchDresses not fetchDress
+    dispatch(fetchDresses(filters))
   }, [dispatch, filters])
 
   useEffect(() => {
@@ -38,16 +37,12 @@ const Home = () => {
     }
   }
 
+  if (loading) return <div className="loading">Loading dresses...</div>
+
   return (
     <div>
       {error && (
-        <div style={{ 
-          background: '#fee', 
-          color: '#c33', 
-          padding: '1rem', 
-          marginBottom: '1rem',
-          borderRadius: '4px'
-        }}>
+        <div className="error-message">
           Error: {error}
         </div>
       )}
@@ -95,24 +90,47 @@ const Home = () => {
         </div>
       </div>
 
-      {loading && <div>Loading dresses...</div>}
-
       <div className="dress-grid">
         {dresses.map(dress => (
           <div key={dress._id} className="dress-card">
             <div className="dress-image">
               {dress.image ? (
-                <img src={dress.image} alt={dress.name} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-              ) : (
-                'No Image'
-              )}
+                <img 
+                  src={dress.image} 
+                  alt={dress.name} 
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div className="image-placeholder" style={{ 
+                display: dress.image ? 'none' : 'flex',
+                width: '100%', 
+                height: '100%', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                backgroundColor: '#f8f9fa',
+                color: '#6c757d',
+                fontSize: '14px'
+              }}>
+                No Image
+              </div>
             </div>
-            <h3>{dress.name}</h3>
-            <p>Type: {dress.type}</p>
-            <p>Color: {dress.color}</p>
-            <p>Size: {dress.size}</p>
-            <p>Occasion: {dress.occasion}</p>
-            <p>Price: ${dress.price}</p>
+            
+            <h3>{dress.name || 'Unnamed Dress'}</h3>
+            <p><strong>Type:</strong> {dress.type ? dress.type.charAt(0).toUpperCase() + dress.type.slice(1) : 'Not specified'}</p>
+            <p><strong>Color:</strong> {dress.color || 'Not specified'}</p>
+            <p><strong>Size:</strong> {dress.size || 'Not specified'}</p>
+            <p><strong>Occasion:</strong> {dress.occasion || 'Not specified'}</p>
+            <p><strong>Price:</strong> ${dress.price ? dress.price.toFixed(2) : '0.00'}</p>
+            <p style={{ 
+              color: dress.inStock ? 'green' : 'red',
+              fontWeight: 'bold'
+            }}>
+              {dress.inStock ? '✅ In Stock' : '❌ Out of Stock'}
+            </p>
+            
             <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
               <Link to={`/edit/${dress._id}`} className="btn btn-primary">
                 Edit
