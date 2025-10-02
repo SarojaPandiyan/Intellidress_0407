@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchDress, updateDress } from '../redux/dressSlice';
+import { fetchDress, updateDress } from '../redux/slices/dressSlice';
 import DressForm from '../components/DressForm';
 import './Pages.css';
 

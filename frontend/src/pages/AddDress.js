@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { createDress } from '../redux/dressSlice';
+import { createDress } from '../redux/slices/dressSlice';
 import DressForm from '../components/DressForm';
 import './Pages.css';
 
