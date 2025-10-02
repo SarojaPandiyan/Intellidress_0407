@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchDresses } from '../redux/slices/dressSlice'
+import { fetchDress } from '../redux/slices/dressSlice'
 
 const DressSuggestions = () => {
   const dispatch = useDispatch()
