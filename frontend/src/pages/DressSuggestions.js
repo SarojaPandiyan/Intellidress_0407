@@ -24,9 +24,9 @@ const DressSuggestions = () => {
     const filters = { ...preferences }
     if (preferences.maxPrice) {
       // This will be handled by the backend
-      dispatch(fetchDresses(filters))
+      dispatch(fetchDress(filters))
     } else {
-      dispatch(fetchDresses(filters))
+      dispatch(fetchDress(filters))
     }
   }
 
