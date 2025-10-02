@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { deleteDress } from '../redux/dressSlice';
+import { deleteDress } from '../redux/slices/dressSlice'; // Fixed import
 import './DressList.css';
 
 const DressList = ({ dresses }) => {
@@ -23,11 +23,22 @@ const DressList = ({ dresses }) => {
       {dresses.map((dress) => (
         <div key={dress._id} className="dress-card">
           <h3>{dress.name}</h3>
+          <div className="dress-image">
+            {dress.image ? (
+              <img src={dress.image} alt={dress.name} />
+            ) : (
+              <div className="image-placeholder">No Image</div>
+            )}
+          </div>
           <div className="dress-info">
-            <p><strong>Occasion:</strong> {dress.occasion}</p>
-            <p><strong>Season:</strong> {dress.season}</p>
+            <p><strong>Type:</strong> {dress.type}</p>
             <p><strong>Color:</strong> {dress.color}</p>
-            <p><strong>Description:</strong> {dress.description}</p>
+            <p><strong>Size:</strong> {dress.size}</p>
+            <p><strong>Occasion:</strong> {dress.occasion}</p>
+            <p><strong>Price:</strong> ${dress.price}</p>
+            <p style={{ color: dress.inStock ? 'green' : 'red' }}>
+              {dress.inStock ? 'In Stock' : 'Out of Stock'}
+            </p>
           </div>
           <div className="dress-actions">
             <button onClick={() => handleEdit(dress._id)} className="btn-edit">
