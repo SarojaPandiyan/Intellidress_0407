@@ -77,7 +77,7 @@ const Home = () => {
             >
               <option value="">All Types</option>
               <option value="casual">Casual</option>
-              <option value="formal">Formual</option>
+              <option value="formal">Formal</option>
               <option value="party">Party</option>
               <option value="wedding">Wedding</option>
               <option value="business">Business</option>
