@@ -13,7 +13,7 @@ const Home = () => {
   })
 
   useEffect(() => {
-    dispatch(fetchDresses(filters))
+    dispatch(fetchDress(filters))
   }, [dispatch, filters])
 
   useEffect(() => {
