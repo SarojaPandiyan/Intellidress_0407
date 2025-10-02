@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchDress, deleteDress, clearError } from '../redux/slices/dressSlice'
+import { fetchDresses, deleteDress, clearError } from '../redux/slices/dressSlice'
 import { Link } from 'react-router-dom'
 
 const Home = () => {
@@ -13,7 +13,7 @@ const Home = () => {
   })
 
   useEffect(() => {
-    dispatch(fetchDress(filters))
+    dispatch(fetchDresses(filters)) // FIXED: fetchDresses not fetchDress
   }, [dispatch, filters])
 
   useEffect(() => {
@@ -54,7 +54,43 @@ const Home = () => {
       <div className="filters">
         <h3>Filter Dresses</h3>
         <div className="filter-row">
-          {/* ... rest of your filter code ... */}
+          <div className="form-group">
+            <label>Type</label>
+            <select 
+              value={filters.type} 
+              onChange={(e) => handleFilterChange('type', e.target.value)}
+            >
+              <option value="">All Types</option>
+              <option value="casual">Casual</option>
+              <option value="formal">Formal</option>
+              <option value="party">Party</option>
+              <option value="wedding">Wedding</option>
+              <option value="business">Business</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Occasion</label>
+            <input 
+              type="text" 
+              value={filters.occasion}
+              onChange={(e) => handleFilterChange('occasion', e.target.value)}
+              placeholder="e.g., beach, office, dinner"
+            />
+          </div>
+          <div className="form-group">
+            <label>Size</label>
+            <select 
+              value={filters.size} 
+              onChange={(e) => handleFilterChange('size', e.target.value)}
+            >
+              <option value="">All Sizes</option>
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -63,7 +99,30 @@ const Home = () => {
       <div className="dress-grid">
         {dresses.map(dress => (
           <div key={dress._id} className="dress-card">
-            {/* ... rest of your dress card code ... */}
+            <div className="dress-image">
+              {dress.image ? (
+                <img src={dress.image} alt={dress.name} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+              ) : (
+                'No Image'
+              )}
+            </div>
+            <h3>{dress.name}</h3>
+            <p>Type: {dress.type}</p>
+            <p>Color: {dress.color}</p>
+            <p>Size: {dress.size}</p>
+            <p>Occasion: {dress.occasion}</p>
+            <p>Price: ${dress.price}</p>
+            <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+              <Link to={`/edit/${dress._id}`} className="btn btn-primary">
+                Edit
+              </Link>
+              <button 
+                onClick={() => handleDelete(dress._id)}
+                className="btn btn-danger"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>

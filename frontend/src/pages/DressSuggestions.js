@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchDress } from '../redux/slices/dressSlice'
+import { fetchDresses } from '../redux/slices/dressSlice' // FIXED: fetchDresses not fetchDress
 
 const DressSuggestions = () => {
   const dispatch = useDispatch()
@@ -22,12 +22,7 @@ const DressSuggestions = () => {
   const handleGetSuggestions = (e) => {
     e.preventDefault()
     const filters = { ...preferences }
-    if (preferences.maxPrice) {
-      // This will be handled by the backend
-      dispatch(fetchDress(filters))
-    } else {
-      dispatch(fetchDress(filters))
-    }
+    dispatch(fetchDresses(filters)) // FIXED: fetchDresses not fetchDress
   }
 
   return (
