@@ -11,7 +11,7 @@ const AddDress = () => {
 
   const handleSubmit = async (formData) => {
     try {
-      await dispatch(createDress(formData)).unwrap();
+      await dispatch(createDress(formData));
       alert('Dress added successfully!');
       navigate('/');
     } catch (error) {

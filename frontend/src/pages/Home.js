@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchDresses, deleteDress, clearError } from '../redux/slices/dressSlice'
 import { Link } from 'react-router-dom'
 import './Pages.css';
+
 const Home = () => {
   const dispatch = useDispatch()
   const { items: dresses, loading, error } = useSelector(state => state.dresses)
@@ -13,8 +14,9 @@ const Home = () => {
   })
 
   useEffect(() => {
-    dispatch(fetchDresses(filters))
-  }, [dispatch, filters])
+    // Load dresses without filters initially
+    dispatch(fetchDresses())
+  }, [dispatch])
 
   useEffect(() => {
     if (error) {
@@ -24,23 +26,38 @@ const Home = () => {
   }, [error, dispatch])
 
   const handleFilterChange = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }))
+    const newFilters = { ...filters, [key]: value }
+    setFilters(newFilters)
+    // Apply filters immediately when they change
+    dispatch(fetchDresses(newFilters))
   }
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this dress?')) {
       try {
-        await dispatch(deleteDress(id)).unwrap()
+        await dispatch(deleteDress(id))
+        alert('Dress deleted successfully!')
+        // Refresh the list after deletion
+        dispatch(fetchDresses(filters))
       } catch (error) {
-        alert('Error deleting dress: ' + error)
+        alert('Error deleting dress: ' + error.message)
       }
     }
+  }
+
+  const clearFilters = () => {
+    setFilters({
+      type: '',
+      occasion: '',
+      size: ''
+    })
+    dispatch(fetchDresses())
   }
 
   if (loading) return <div className="loading">Loading dresses...</div>
 
   return (
-    <div>
+    <div className="page-container">
       {error && (
         <div className="error-message">
           Error: {error}
@@ -88,6 +105,9 @@ const Home = () => {
             </select>
           </div>
         </div>
+        <button onClick={clearFilters} className="btn btn-secondary">
+          Clear Filters
+        </button>
       </div>
 
       <div className="dress-grid">
@@ -105,14 +125,7 @@ const Home = () => {
                 />
               ) : null}
               <div className="image-placeholder" style={{ 
-                display: dress.image ? 'none' : 'flex',
-                width: '100%', 
-                height: '100%', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                backgroundColor: '#f8f9fa',
-                color: '#6c757d',
-                fontSize: '14px'
+                display: dress.image ? 'none' : 'flex'
               }}>
                 No Image
               </div>
@@ -124,6 +137,7 @@ const Home = () => {
             <p><strong>Size:</strong> {dress.size || 'Not specified'}</p>
             <p><strong>Occasion:</strong> {dress.occasion || 'Not specified'}</p>
             <p><strong>Price:</strong> ${dress.price ? dress.price.toFixed(2) : '0.00'}</p>
+            {dress.description && <p><strong>Description:</strong> {dress.description}</p>}
             <p style={{ 
               color: dress.inStock ? 'green' : 'red',
               fontWeight: 'bold'
@@ -131,7 +145,7 @@ const Home = () => {
               {dress.inStock ? '✅ In Stock' : '❌ Out of Stock'}
             </p>
             
-            <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+            <div className="dress-actions">
               <Link to={`/edit/${dress._id}`} className="btn btn-primary">
                 Edit
               </Link>

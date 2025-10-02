@@ -156,6 +156,17 @@ const DressForm = ({ initialData, onSubmit, buttonText }) => {
         </label>
       </div>
 
+      <div className="form-group">
+        <label>Description</label>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          rows="3"
+          placeholder="Enter dress description"
+        />
+      </div>
+
       <button type="submit" className="btn-submit">
         {buttonText}
       </button>
