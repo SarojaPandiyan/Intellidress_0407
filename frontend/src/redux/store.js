@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import dressReducer from './dressSlice';
+import dressReducer from './slices/dressSlice';
 
 export const store = configureStore({
   reducer: {
