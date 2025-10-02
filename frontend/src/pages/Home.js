@@ -14,8 +14,8 @@ const Home = () => {
   })
 
   useEffect(() => {
-    // Load dresses without filters initially
-    dispatch(fetchDresses())
+    // Load all dresses initially
+    dispatch(fetchDresses());
   }, [dispatch])
 
   useEffect(() => {
@@ -26,32 +26,34 @@ const Home = () => {
   }, [error, dispatch])
 
   const handleFilterChange = (key, value) => {
-    const newFilters = { ...filters, [key]: value }
-    setFilters(newFilters)
+    const newFilters = { ...filters, [key]: value };
+    setFilters(newFilters);
+    
     // Apply filters immediately when they change
-    dispatch(fetchDresses(newFilters))
+    dispatch(fetchDresses(newFilters));
   }
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this dress?')) {
       try {
-        await dispatch(deleteDress(id))
-        alert('Dress deleted successfully!')
-        // Refresh the list after deletion
-        dispatch(fetchDresses(filters))
+        await dispatch(deleteDress(id));
+        alert('Dress deleted successfully!');
+        // Refresh the list after deletion with current filters
+        dispatch(fetchDresses(filters));
       } catch (error) {
-        alert('Error deleting dress: ' + error.message)
+        alert('Error deleting dress: ' + error.message);
       }
     }
   }
 
   const clearFilters = () => {
-    setFilters({
+    const clearedFilters = {
       type: '',
       occasion: '',
       size: ''
-    })
-    dispatch(fetchDresses())
+    };
+    setFilters(clearedFilters);
+    dispatch(fetchDresses(clearedFilters));
   }
 
   if (loading) return <div className="loading">Loading dresses...</div>
@@ -75,7 +77,7 @@ const Home = () => {
             >
               <option value="">All Types</option>
               <option value="casual">Casual</option>
-              <option value="formal">Formal</option>
+              <option value="formal">Formual</option>
               <option value="party">Party</option>
               <option value="wedding">Wedding</option>
               <option value="business">Business</option>
@@ -108,6 +110,16 @@ const Home = () => {
         <button onClick={clearFilters} className="btn btn-secondary">
           Clear Filters
         </button>
+        
+        {/* Show active filters */}
+        {(filters.type || filters.occasion || filters.size) && (
+          <div style={{ marginTop: '1rem', padding: '0.5rem', background: '#e9ecef', borderRadius: '4px' }}>
+            <strong>Active Filters:</strong> 
+            {filters.type && ` Type: ${filters.type}`}
+            {filters.occasion && ` Occasion: ${filters.occasion}`}
+            {filters.size && ` Size: ${filters.size}`}
+          </div>
+        )}
       </div>
 
       <div className="dress-grid">
@@ -162,10 +174,10 @@ const Home = () => {
 
       {!loading && dresses.length === 0 && (
         <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <p>No dresses found. Add some dresses to get started!</p>
-          <Link to="/add" className="btn btn-primary">
-            Add Your First Dress
-          </Link>
+          <p>No dresses found matching your filters. Try adjusting your search criteria.</p>
+          <button onClick={clearFilters} className="btn btn-primary">
+            Clear Filters
+          </button>
         </div>
       )}
     </div>
